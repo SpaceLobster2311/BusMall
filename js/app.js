@@ -2,16 +2,19 @@
 let totalClicks = 0;
 let clicksAllowed = 25;
 let allItems = [];
-// let indexArray = [];
+let container = document.getElementById('imgContainer');
+let indexArray = [];
 
 let firstImage = document.querySelector('section img:first-child');
 let secondImage = document.querySelector('section img:nth-child(2)');
 let thirdImage = document.querySelector('section img:nth-child(3)');
 
+let theButton = document.querySelector('div');
+
 
 function Bus(name, fileExtenstion = 'jpg') {
   this.name = name;
-  this.src = `../img/${name}.${fileExtenstion}`;
+  this.src = `img/${name}.${fileExtenstion}`;
   this.views = 0;
   this.clicks = 0;
   allItems.push(this);
@@ -38,34 +41,85 @@ new Bus('usb', 'gif');
 new Bus('water-can');
 new Bus('wine-glass');
 
+
+
 function getRandomIndex() {
-  let btn = document.getElementById('btn');
-  btn.addEventListener('click', renderBus());
+  return Math.floor(Math.random() * allItems.length);
 }
-function renderBus() {
-  alert('Hello');
-  let itemArray = [];
-  for (let i = 0; i < 3; i++) {
-    let num = Math.floor(Math.random() * allItems.length);
-    let item = allItems[num];
-    itemArray.push(item);
-    // use array to check for repeats later
-    console.log(allItems[num].src);
 
-    let container = document.getElementById('imgContainer');
-    let img = document.createElement('img');
-    img.setAttribute('src', `${allItems[num].src}`);
-    img.addEventListener('click', function(){
-      // function above needs to cycle the pics and store the votes in a list
-      alert('hey');
-    });
-    container.appendChild(img);
+function populateIndexArray() {
+  while(indexArray.length < 3){
+    let randomIndex = getRandomIndex();
+    while(!indexArray.includes(randomIndex)){
+      indexArray.push(randomIndex);
+    }
   }
-  // let firstBusIndex = getRandomIndex();
-  // let secondBusIndex = getRandomIndex();
-  // let thirdBusIndex = getRandomIndex();
-  
 }
 
-getRandomIndex();
+// console.log(indexArray);
+
+
+
+
+function renderBus() {
+
+  populateIndexArray();
+  let firstBusIndex = indexArray.pop();
+  let secondBusIndex = indexArray.pop();
+  let thirdBusIndex = indexArray.pop();
+
+  firstImage.src = allItems[firstBusIndex].src;
+  firstImage.title = allItems[firstBusIndex].name;
+  allItems[firstBusIndex].views++;
+  secondImage.src = allItems[secondBusIndex].src;
+  secondImage.title = allItems[secondBusIndex].name;
+  allItems[secondBusIndex].views++;
+  thirdImage.src = allItems[thirdBusIndex].src;
+  thirdImage.title = allItems[thirdBusIndex].name;
+  allItems[thirdBusIndex].views++;
+  //repeat for 2 and 3. Then write event handler
+
+}
+
+function renderResult() {
+  let theList = document.querySelector('ul');
+  for (let i = 0; i < allItems.length; i++){
+    let li = document.createElement('li');
+    li.textContent = `${allItems[i].name} had ${allItems[i].clicks} votes. It was shown ${allItems[i].views} times`;
+    theList.appendChild(li);
+  }
+}
+
+function handleClick(event) {
+  if (event.target === container){
+    alert('Click an image');
+  }
+  totalClicks++;
+  let busClicked = event.target.title;
+
+  for(let i = 0; i<allItems.length; i++){
+    if (busClicked === allItems[i].name) {
+      allItems[i].clicks++;
+    }
+  }
+  renderBus();
+  if (totalClicks === clicksAllowed){
+    container.removeEventListener('click', handleClick);
+  }
+
+}
+
+
+function handleBtnClick(event) {
+  if(totalClicks === clicksAllowed){
+    renderResult();
+  }
+}
+
+
+renderBus();
+container.addEventListener('click', handleClick);
+theButton.addEventListener('click', handleBtnClick);
+
+
 
