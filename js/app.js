@@ -48,9 +48,9 @@ function getRandomIndex() {
 }
 
 function populateIndexArray() {
-  while(indexArray.length < uniqueImgCount){
+  while (indexArray.length < uniqueImgCount) {
     let randomIndex = getRandomIndex();
-    while(!indexArray.includes(randomIndex)){
+    while (!indexArray.includes(randomIndex)) {
       indexArray.push(randomIndex);
     }
   }
@@ -85,7 +85,7 @@ function renderBus() {
 
 function renderResult() {
   let theList = document.querySelector('ul');
-  for (let i = 0; i < allItems.length; i++){
+  for (let i = 0; i < allItems.length; i++) {
     let li = document.createElement('li');
     li.textContent = `${allItems[i].name} had ${allItems[i].clicks} votes. It was shown ${allItems[i].views} times`;
     theList.appendChild(li);
@@ -93,19 +93,19 @@ function renderResult() {
 }
 
 function handleClick(event) {
-  if (event.target === container){
+  if (event.target === container) {
     alert('Click an image');
   }
   totalClicks++;
   let busClicked = event.target.title;
 
-  for(let i = 0; i<allItems.length; i++){
+  for (let i = 0; i < allItems.length; i++) {
     if (busClicked === allItems[i].name) {
       allItems[i].clicks++;
     }
   }
   renderBus();
-  if (totalClicks === clicksAllowed){
+  if (totalClicks === clicksAllowed) {
     container.removeEventListener('click', handleClick);
   }
 
@@ -113,13 +113,50 @@ function handleClick(event) {
 
 
 function handleBtnClick(event) {
-  if(totalClicks === clicksAllowed){
+  if (totalClicks === clicksAllowed) {
     renderResult();
   }
 }
 
 
 renderBus();
+var ctx = document.getElementById('myChart').getContext('2d');
+var myChart = new Chart(ctx, {
+  type: 'bar',
+  data: {
+    labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+    datasets: [{
+      label: '# of Votes',
+      data: [12, 19, 3, 5, 2, 3],
+      backgroundColor: [
+        'rgba(255, 99, 132, 0.2)',
+        'rgba(54, 162, 235, 0.2)',
+        'rgba(255, 206, 86, 0.2)',
+        'rgba(75, 192, 192, 0.2)',
+        'rgba(153, 102, 255, 0.2)',
+        'rgba(255, 159, 64, 0.2)'
+      ],
+      borderColor: [
+        'rgba(255, 99, 132, 1)',
+        'rgba(54, 162, 235, 1)',
+        'rgba(255, 206, 86, 1)',
+        'rgba(75, 192, 192, 1)',
+        'rgba(153, 102, 255, 1)',
+        'rgba(255, 159, 64, 1)'
+      ],
+      borderWidth: 1
+    }]
+  },
+  options: {
+    scales: {
+      yAxes: [{
+        ticks: {
+          beginAtZero: true
+        }
+      }]
+    }
+  }
+});
 container.addEventListener('click', handleClick);
 theButton.addEventListener('click', handleBtnClick);
 
