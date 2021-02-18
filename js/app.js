@@ -4,7 +4,7 @@ let clicksAllowed = 25;
 let allItems = [];
 let container = document.getElementById('imgContainer');
 let indexArray = [];
-
+let uniqueImgCount = 6;
 let firstImage = document.querySelector('section img:first-child');
 let secondImage = document.querySelector('section img:nth-child(2)');
 let thirdImage = document.querySelector('section img:nth-child(3)');
@@ -48,15 +48,17 @@ function getRandomIndex() {
 }
 
 function populateIndexArray() {
-  while(indexArray.length < 3){
+  while(indexArray.length < uniqueImgCount){
     let randomIndex = getRandomIndex();
     while(!indexArray.includes(randomIndex)){
       indexArray.push(randomIndex);
     }
   }
+  console.log(indexArray);
 }
 
-// console.log(indexArray);
+
+
 
 
 
@@ -64,9 +66,9 @@ function populateIndexArray() {
 function renderBus() {
 
   populateIndexArray();
-  let firstBusIndex = indexArray.pop();
-  let secondBusIndex = indexArray.pop();
-  let thirdBusIndex = indexArray.pop();
+  let firstBusIndex = indexArray.shift();
+  let secondBusIndex = indexArray.shift();
+  let thirdBusIndex = indexArray.shift();
 
   firstImage.src = allItems[firstBusIndex].src;
   firstImage.title = allItems[firstBusIndex].name;
