@@ -9,7 +9,7 @@ let firstImage = document.querySelector('section img:first-child');
 let secondImage = document.querySelector('section img:nth-child(2)');
 let thirdImage = document.querySelector('section img:nth-child(3)');
 
-let theButton = document.querySelector('div');
+// let theButton = document.querySelector('div');
 
 
 function Bus(name, fileExtenstion = 'jpg') {
@@ -54,7 +54,7 @@ function populateIndexArray() {
       indexArray.push(randomIndex);
     }
   }
-  console.log(indexArray);
+  // console.log(indexArray);
 }
 
 
@@ -83,14 +83,14 @@ function renderBus() {
 
 }
 
-function renderResult() {
-  let theList = document.querySelector('ul');
-  for (let i = 0; i < allItems.length; i++) {
-    let li = document.createElement('li');
-    li.textContent = `${allItems[i].name} had ${allItems[i].clicks} votes. It was shown ${allItems[i].views} times`;
-    theList.appendChild(li);
-  }
-}
+// function renderResult() {
+//   let theList = document.querySelector('ul');
+//   for (let i = 0; i < allItems.length; i++) {
+//     let li = document.createElement('li');
+//     li.textContent = `${allItems[i].name} had ${allItems[i].clicks} votes. It was shown ${allItems[i].views} times`;
+//     theList.appendChild(li);
+//   }
+// }
 
 function handleClick(event) {
   if (event.target === container) {
@@ -107,58 +107,65 @@ function handleClick(event) {
   renderBus();
   if (totalClicks === clicksAllowed) {
     container.removeEventListener('click', handleClick);
+    renderChart();
   }
 
 }
 
 
-function handleBtnClick(event) {
-  if (totalClicks === clicksAllowed) {
-    renderResult();
-  }
-}
+// function handleBtnClick(event) {
+//   if (totalClicks === clicksAllowed) {
+//     renderResult();
+//   }
+// }
 
 
 renderBus();
-var ctx = document.getElementById('myChart').getContext('2d');
-var myChart = new Chart(ctx, {
-  type: 'bar',
-  data: {
-    labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-    datasets: [{
-      label: '# of Votes',
-      data: [12, 19, 3, 5, 2, 3],
-      backgroundColor: [
-        'rgba(255, 99, 132, 0.2)',
-        'rgba(54, 162, 235, 0.2)',
-        'rgba(255, 206, 86, 0.2)',
-        'rgba(75, 192, 192, 0.2)',
-        'rgba(153, 102, 255, 0.2)',
-        'rgba(255, 159, 64, 0.2)'
-      ],
-      borderColor: [
-        'rgba(255, 99, 132, 1)',
-        'rgba(54, 162, 235, 1)',
-        'rgba(255, 206, 86, 1)',
-        'rgba(75, 192, 192, 1)',
-        'rgba(153, 102, 255, 1)',
-        'rgba(255, 159, 64, 1)'
-      ],
-      borderWidth: 1
-    }]
-  },
-  options: {
-    scales: {
-      yAxes: [{
-        ticks: {
-          beginAtZero: true
-        }
-      }]
-    }
+
+function renderChart() {
+  let busNames = [];
+  let busViews = [];
+  let busClicks = [];
+  for (let i = 0; i < allItems.length; i++) {
+    busNames.push(allItems[i].name);
+    busViews.push(allItems[i].views);
+    busClicks.push(allItems[i].clicks);
   }
-});
+
+
+  var ctx = document.getElementById('myChart').getContext('2d');
+  var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: busNames,
+      datasets: [{
+        label: '# of Views',
+        data: busViews,
+        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+        borderColor: 'rgba(153, 102, 255, 1)',
+        borderWidth: 1
+      },
+      {
+        label: '# of Clicks',
+        data: busClicks,
+        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+        borderColor: 'rgba(153, 102, 255, 1)',
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        yAxes: [{
+          ticks: {
+            beginAtZero: true
+          }
+        }]
+      }
+    }
+  });
+}
 container.addEventListener('click', handleClick);
-theButton.addEventListener('click', handleBtnClick);
+// theButton.addEventListener('click', handleBtnClick);
 
 
 
