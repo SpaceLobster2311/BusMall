@@ -19,29 +19,33 @@ function Bus(name, fileExtenstion = 'jpg') {
   this.clicks = 0;
   allItems.push(this);
 }
+let retrieveBus = localStorage.getItem('products');
 
-new Bus('bag');
-new Bus('banana');
-new Bus('bathroom');
-new Bus('boots');
-new Bus('breakfast');
-new Bus('bubblegum');
-new Bus('chair');
-new Bus('cthulhu');
-new Bus('dog-duck');
-new Bus('dragon');
-new Bus('pen');
-new Bus('pet-sweep');
-new Bus('scissors');
-new Bus('shark');
-new Bus('sweep', 'png');
-new Bus('tauntaun');
-new Bus('unicorn');
-new Bus('usb', 'gif');
-new Bus('water-can');
-new Bus('wine-glass');
-
-
+if (retrieveBus) {
+  let parsedBus = JSON.parse(retrieveBus);
+  allItems = parsedBus;
+} else {
+  new Bus('bag');
+  new Bus('banana');
+  new Bus('bathroom');
+  new Bus('boots');
+  new Bus('breakfast');
+  new Bus('bubblegum');
+  new Bus('chair');
+  new Bus('cthulhu');
+  new Bus('dog-duck');
+  new Bus('dragon');
+  new Bus('pen');
+  new Bus('pet-sweep');
+  new Bus('scissors');
+  new Bus('shark');
+  new Bus('sweep', 'png');
+  new Bus('tauntaun');
+  new Bus('unicorn');
+  new Bus('usb', 'gif');
+  new Bus('water-can');
+  new Bus('wine-glass');
+}
 
 function getRandomIndex() {
   return Math.floor(Math.random() * allItems.length);
@@ -108,6 +112,9 @@ function handleClick(event) {
   if (totalClicks === clicksAllowed) {
     container.removeEventListener('click', handleClick);
     renderChart();
+    let stringifiedBus = JSON.stringify(allItems);
+    // console.log(stringifiedBus);
+    localStorage.setItem('products', stringifiedBus);
   }
 
 }
